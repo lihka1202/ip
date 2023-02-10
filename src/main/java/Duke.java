@@ -19,6 +19,7 @@ public class Duke {
         return userInput.split(" ")[0].equals(toCompare);
     }
 
+
     public static boolean isInRange(String userInput, int currentIndex) {
         return (Integer.parseInt(userInput.split(" ")[1])>0 && Integer.parseInt(userInput.split(" ")[1])<currentIndex+1);
     }
