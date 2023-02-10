@@ -19,13 +19,6 @@ public class Duke {
         return userInput.split(" ")[0].equals(toCompare);
     }
 
-    /**
-     * Issue regarding index marking being off by one has been resolved.
-     * @param userInput
-     * @param currentIndex
-     * @return boolean
-     */
-
     public static boolean isInRange(String userInput, int currentIndex) {
         return (Integer.parseInt(userInput.split(" ")[1])>0 && Integer.parseInt(userInput.split(" ")[1])<currentIndex+1);
     }
@@ -61,6 +54,12 @@ public class Duke {
     }
 
     public static void printTodo(String userInput) {
+        while((userInput.split(" ")).length==1) {
+            printLine();
+            System.out.println("\tPlease re-enter the todo command with a description!");
+            printLine();
+            userInput = in.nextLine();
+        }
         printLine();
         String input = userInput.replace("todo ", "");
         taskList[currentIndex] = new Todos(input);
@@ -69,6 +68,12 @@ public class Duke {
         printLine();
     }
     public static void printDeadline(String userInput) {
+        while(((userInput.split(" ")).length==1) || !(userInput.contains("/by"))) {
+            printLine();
+            System.out.println("\tPlease re-enter the deadline command with a clearer description!");
+            printLine();
+            userInput = in.nextLine();
+        }
         printLine();
         String [] deadlineAndDescription = getDeadline(userInput);
         taskList[currentIndex] = new Deadlines(deadlineAndDescription[0], deadlineAndDescription[1]);
@@ -78,6 +83,12 @@ public class Duke {
     }
 
     public static void printEvent(String userInput) {
+        while(((userInput.split(" ")).length==1) || (!(userInput.contains("/from")) || !(userInput.contains("/to")))) {
+            printLine();
+            System.out.println("\tPlease re-enter the event command with a clearer description!");
+            printLine();
+            userInput = in.nextLine();
+        }
         printLine();
         String [] eventDescription = getEvent(userInput);
         taskList[currentIndex] = new Events(eventDescription[0], eventDescription[1], eventDescription[2]);
@@ -103,6 +114,8 @@ public class Duke {
     final static int MAXTASKS = 100;
     public static Task[] taskList = new Task[MAXTASKS];
     public static int currentIndex = 0;
+    public static String userInput;
+    public static Scanner in = new Scanner(System.in);
     public static void main(String[] args) {
         String logo = " ____        _        \n"
                 + "|  _ \\ _   _| | _____ \n"
@@ -114,10 +127,15 @@ public class Duke {
         System.out.println("Hello! I'm Duke");
         System.out.println("What can I do for you?");
         System.out.println("---------------------------------------------------------------------------------");
-        Scanner in = new Scanner(System.in);
-        String userInput;
+//        DukeException Handler = new DukeException();
         while (true) { // ensure that the loop can stay on forever if needed.
             userInput = in.nextLine();
+            while(userInput.equals("") || userInput.equals(" ")) {
+                printLine();
+                System.out.println("\tPlease enter a valid command!");
+                printLine();
+                userInput = in.nextLine();
+            }
             if(userInput.equals("bye")) { // exit command
                 break;
             } else if(userInput.equals("list")) { //displays the list if needed
@@ -130,7 +148,6 @@ public class Duke {
                     printLine();
                     System.out.println("\tNice try, enter a valid index to mark:");
                     printLine();
-                    userInput = in.nextLine();
                 }
                 printLine();
                 printMarkedTask(userInput, taskList);
@@ -140,7 +157,7 @@ public class Duke {
                     printLine();
                     System.out.println("\tNice try, enter a valid index to unmark:");
                     printLine();
-                    userInput = in.nextLine();
+//                    userInput = Handler.exceptionHandlerMark(in);
                 }
                 printLine();
                 printUnmarkedTask(userInput, taskList);
@@ -152,8 +169,7 @@ public class Duke {
                printDeadline(userInput);
             } else if(isTheSame(userInput, "event")) {
                 printEvent(userInput);
-            }
-            else { // tells the user that we have added the task in
+            } else { // tells the user that we have added the task in
                 printTask(userInput);
             }
         }
