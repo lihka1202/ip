@@ -88,6 +88,7 @@ public class Duke {
             System.out.println("\tPlease re-enter the event command with a clearer description!");
             printLine();
             userInput = in.nextLine();
+            //need to add in more stuff
         }
         printLine();
         String [] eventDescription = getEvent(userInput);
